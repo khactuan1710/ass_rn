@@ -12,10 +12,14 @@
   "dependencies": {
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "fbjs": "^3.0.2",
     "react": "17.0.2",
     "react-native": "0.67.1",
+    "react-native-image-crop-picker": "^0.37.2",
+    "react-native-photo-library": "^1.0.5",
     "react-native-safe-area-context": "^3.3.2",
-    "react-native-screens": "^3.10.2"
+    "react-native-screens": "^3.10.2",
+    "zustand": "^3.6.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
