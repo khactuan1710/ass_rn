@@ -5,6 +5,7 @@ import Login from '../features/login/Login';
 import Home from '../features/home/Home';
 import NewsFeed from '../features/newsFeed/NewsFeed';
 import PostBlog from '../features/postBlog/PostBlog';
+import SearchNewsFeed from '../features/newsFeed/SearchNewsFeed';
 import {StyleSheet} from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -30,6 +31,7 @@ const Navigation = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="PostBlog" component={PostBlog} />
         <Stack.Screen name="NewsFeed" component={NewsFeed} />
+        <Stack.Screen name="SearchNewsFeed" component={SearchNewsFeed} />
       </Stack.Navigator>
     );
   }

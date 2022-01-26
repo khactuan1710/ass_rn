@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,10 @@ import {
   Image,
   TextInput,
   FlatList,
+  Share,
 } from 'react-native';
 import {Color} from '../../assets/color/color';
+import useNewsFeedStore from './useNewsFeedStore';
 const FakeData = [
   {
     id: 1,
@@ -61,13 +63,46 @@ const FakeData = [
   },
 ];
 const NewsFeed = ({navigation}) => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: 'React Native | A framework for building na ',
+        image:
+          'https://www.gettyimages.pt/gi-resources/images/Homepage/Hero/PT/PT_hero_42_153645159.jpg',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  const shareOptions = {
+    title: 'Title',
+    message: 'Message to share', // Note that according to the documentation at least one of "message" or "url" fields is required
+    url: 'https://stackoverflow.com/questions/55492300/share-images-to-social-media-using-react-native',
+    subject: 'Subject',
+  };
+
+  const {isLike, setIsLike} = useNewsFeedStore(state => state);
+  const onSharePress = () => Share.share(shareOptions);
+
+  const goToSearchNewsFeed = () => {
+    navigation.navigate('SearchNewsFeed');
+  };
   return (
     <View>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.btnLogOut}
           onPress={() => {
-            console.log('call');
+            goToSearchNewsFeed();
           }}>
           <Image
             source={require('../../assets/image/ic_search.png')}
@@ -75,7 +110,7 @@ const NewsFeed = ({navigation}) => {
           />
           <Text style={{marginLeft: 5, color: '#c4c4c4'}}>
             {' '}
-            {'Tìm kiếm bài viết'}
+            {'Tìm kiếm bài viết theo tên tác giả'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -138,17 +173,33 @@ const NewsFeed = ({navigation}) => {
                     height: 40,
                   }}>
                   <TouchableOpacity
+                    onPress={() => {
+                      setIsLike(!isLike);
+                    }}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
                       flexDirection: 'row',
                       marginLeft: 15,
                     }}>
-                    <Image
-                      source={require('../../assets/image/like.png')}
-                      style={{height: 18, width: 18}}
-                    />
-                    <Text style={{color: '#9c9c9c', marginLeft: 5}}>Thích</Text>
+                    {isLike ? (
+                      <Image
+                        source={require('../../assets/image/liked.png')}
+                        style={{height: 18, width: 18}}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../../assets/image/like.png')}
+                        style={{height: 18, width: 18}}
+                      />
+                    )}
+                    <Text
+                      style={{
+                        color: isLike ? 'blue' : '#9c9c9c',
+                        marginLeft: 5,
+                      }}>
+                      Thích
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{
@@ -165,6 +216,9 @@ const NewsFeed = ({navigation}) => {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
+                    onPress={() => {
+                      onSharePress();
+                    }}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
